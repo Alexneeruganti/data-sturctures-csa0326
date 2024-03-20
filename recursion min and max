@@ -1,0 +1,82 @@
+#include <stdio.h>
+#define MAX_VERTICES 100
+int main()
+{
+int N,M,i;
+printf("Enter the number of vertices (N) and edges (M): ");
+scanf("%d %d", &N, &M);
+int graph[MAX_VERTICES][MAX_VERTICES] = {0};
+printf("Enter the edges (u v):\n");
+for (i = 1; i < M; i++)
+{
+int u, v;
+scanf("%d %d", &u, &v);
+graph[u][v] = graph[v][u] = 1; // Since it is an undirected graph
+}
+int source, destination;
+printf("Enter the source and destination vertices: ");
+scanf("%d %d", &source, &destination);
+int queue[MAX_VERTICES], front = -1, rear = -1, visited[MAX_VERTICES] = {0}, distance[MAX_VERTICES] = {0};
+queue[++rear] = source;
+visited[source] = 1;
+while (front < rear) {
+int current = queue[++front];
+for (i = 1; i <= N; i++) {
+if (graph[current][i] == 1 && !visited[i]) {
+queue[++rear] = i;
+visited[i] = 1;
+distance[i] = distance[current] + 1;
+if (i == destination)
+{
+printf("Minimum number of edges between (%d, %d): %d\n", source, destination, distance[i]);
+return 0;
+}
+}
+}
+}
+printf("No path found between (%d, %d).\n", source, destination);
+return 0;
+}
+3. Given the head of a singly linked list, return number of nodes present in a linked
+Example 1:
+1->2->3->5->8
+Output 5
+PROGRAM:
+#include<stdio.h>
+#include <stdlib.h>
+struct ListNode {
+int val;
+struct ListNode* next;
+};
+int countNodes(struct ListNode* head) {
+int count = 0;
+struct ListNode* current = head;
+while (current != NULL) {
+count++;
+current = current->next;
+}
+return count;
+}
+int main() {
+struct ListNode* head = (struct ListNode*)malloc(sizeof(struct ListNode));
+head->val = 1;
+head->next = (struct ListNode*)malloc(sizeof(struct ListNode));
+head->next->val = 2;
+head->next->next = (struct ListNode*)malloc(sizeof(struct ListNode));
+head->next->next->val = 3;
+head->next->next->next = (struct ListNode*)malloc(sizeof(struct ListNode));
+head->next->next->next->val = 5;
+head->next->next->next->next = (struct ListNode*)malloc(sizeof(struct ListNode));
+head->next->next->next->next->val = 8;
+head->next->next->next->next->next = NULL;
+int result = countNodes(head);
+printf("Number of nodes: %d\n", result);
+struct ListNode* current = head;
+struct ListNode* next;
+while (current != NULL) {
+next = current->next;
+free(current);
+current = next;
+}
+return 0;
+}
